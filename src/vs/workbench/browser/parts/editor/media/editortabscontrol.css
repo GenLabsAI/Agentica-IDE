@@ -15,6 +15,18 @@
 	flex: 1;
 }
 
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab {
+	height: calc(var(--editor-group-tab-height) - 8px) !important;
+    margin: 4px;
+    margin-right: 0;
+    border-radius: 8px;
+}
+
+.tab .monaco-icon-label::after {
+	margin: 0 0 0 4px;
+}
+
 .monaco-workbench .part.editor > .content .editor-group-container > .title .title-label .label-name,
 .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab .tab-label .label-name {
 	white-space: nowrap;
@@ -36,6 +48,10 @@
 
 .monaco-workbench .part.editor > .content .editor-group-container > .title .monaco-icon-label::before {
 	height: var(--editor-group-tab-height); /* tweak the icon size of the editor labels when icons are enabled */
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab .tab-label {
+	line-height: calc(var(--editor-group-tab-height) - 8px);
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container > .title.breadcrumbs .monaco-icon-label::after,

@@ -9,8 +9,18 @@
 
 .monaco-editor .monaco-resizable-hover {
 	border: 1px solid var(--vscode-editorHoverWidget-border);
-	border-radius: 3px;
 	box-sizing: content-box;
+	border-radius: 16px;
+}
+
+
+.monaco-editor .monaco-resizable-hover .monaco-hover {
+	border-radius: 16px;
+}
+
+.monaco-editor .monaco-resizable-hover .monaco-hover {
+    background-color: transparent;
+    backdrop-filter: blur(12px);
 }
 
 .monaco-editor .monaco-resizable-hover > .monaco-hover {

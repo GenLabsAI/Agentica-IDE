@@ -1144,7 +1144,7 @@ const UserMessageComponent = ({ chatMessage, messageIdx, isCheckpointGhost, curr
 			<VoidInputBox2
 				enableAtToMention
 				ref={setTextAreaRef}
-				className='min-h-[81px] max-h-[500px] px-0.5'
+				className='min-h-[81px] max-h-[500px] px-0.5 rounded-lg'
 				placeholder="Edit your message..."
 				onChangeText={(text) => setIsDisabled(!text)}
 				onFocus={() => {
@@ -2871,6 +2871,38 @@ const EditToolSoFar = ({ toolCallSoFar, }: { toolCallSoFar: RawToolCallObj }) =>
 
 
 export const SidebarChat = () => {
+	// Get time of day
+    var time = new Date().getHours();
+	var options = []
+	var greetingText = ""
+    if (time < 12) {
+		options = [
+			"Good morning, how can I help you?",
+			"What's on your mind this morning?",
+			"What should we build together?",
+			"What can I do for you today?"
+		]
+		// Pick random
+		greetingText = options[Math.floor(Math.random() * options.length)]
+    } else if (time < 18) {
+		options = [
+			"Good afternoon, how can I help you?",
+			"What's on your mind this afternoon?",
+			"What should we build together?",
+			"What can I do for you today?"
+		]
+		// Pick random
+		greetingText = options[Math.floor(Math.random() * options.length)]
+    } else {
+		options = [
+			"Good evening, how can I help you?",
+			"What's on your mind this evening?",
+			"What should we build together?",
+			"What can I do for you today?"
+		]
+		// Pick random
+		greetingText = options[Math.floor(Math.random() * options.length)]
+    }
 	const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
 	const textAreaFnsRef = useRef<TextAreaFns | null>(null)
 
@@ -3067,9 +3099,11 @@ export const SidebarChat = () => {
 		setSelections={setSelections}
 		onClickAnywhere={() => { textAreaRef.current?.focus() }}
 	>
+	    <h2>{greetingText}</h2>
+		<br></br><br></br>
 		<VoidInputBox2
 			enableAtToMention
-			className={`min-h-[81px] px-0.5 py-0.5`}
+			className={`min-h-[81px] px-1 py-1 rounded-md`}
 			placeholder={`@ to mention, ${keybindingString ? `${keybindingString} to add a selection. ` : ''}Enter instructions...`}
 			onChangeText={onChangeText}
 			onKeyDown={onKeyDown}

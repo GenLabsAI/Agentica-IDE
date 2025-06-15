@@ -13,6 +13,9 @@
 	outline-style: none;
 }
 
+.breadcrumbs-below-tabs .monaco-breadcrumbs {
+	border-radius: 8px 8px 0 0;
+}
 
 .monaco-breadcrumbs .monaco-breadcrumb-item {
 	display: flex;

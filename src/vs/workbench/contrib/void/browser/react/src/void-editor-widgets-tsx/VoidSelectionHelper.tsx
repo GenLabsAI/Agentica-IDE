@@ -77,6 +77,7 @@ const VoidSelectionHelper = ({ rerenderKey }: VoidSelectionHelperProps) => {
 				className='
 					flex items-center px-2 py-1.5
 					cursor-pointer
+					rounded-lg
 				'
 				onClick={() => {
 					commandService.executeCommand(VOID_CTRL_L_ACTION_ID)

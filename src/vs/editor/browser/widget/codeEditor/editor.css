@@ -78,7 +78,7 @@
 
 
 .monaco-editor .squiggly-error {
-	border-bottom: 4px double var(--vscode-editorError-border);
+	border-bottom: 2px solid var(--vscode-editorError-border);
 }
 .monaco-editor .squiggly-error::before {
 	display: block;

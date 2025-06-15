@@ -39,7 +39,7 @@ const ModelSelectBox = ({ options, featureName, className }: { options: ModelOpt
 		onChangeOption={onChangeOption}
 		getOptionDisplayName={(option) => option.selection.modelName}
 		getOptionDropdownName={(option) => option.selection.modelName}
-		getOptionDropdownDetail={(option) => option.selection.providerName}
+		getOptionDropdownDetail={(option) => "1 request"} // TODO: Get pricing
 		getOptionsEqual={(a, b) => optionsEqual([a], [b])}
 		className={className}
 		matchInputWidth={false}

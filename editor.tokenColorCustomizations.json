@@ -1,0 +1,11 @@
+{
+  "editor.tokenColorCustomizations": {
+    "comments": "#888888", // Light Gray
+    "strings": "#D83C3C",  // Muted Red
+    "keywords": "#8A2BE2", // Muted Purple
+    "numbers": "#3C9A3C",  // Muted Green
+    "types": "#2070C0",   // Muted Blue
+    "functions": "#C07020", // Muted Orange
+    "variables": "#444444"  // Darker Gray
+  }
+}

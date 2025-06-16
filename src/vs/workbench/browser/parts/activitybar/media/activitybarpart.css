@@ -6,6 +6,7 @@
 .monaco-workbench .part.activitybar {
 	width: 48px;
 	height: 100%;
+	background-color: var(--vscode-activityBar-background, #EAEAEA); /* Theme background */
 }
 
 .monaco-workbench .activitybar.bordered::before {
@@ -15,19 +16,21 @@
 	box-sizing: border-box;
 	height: 100%;
 	width: 0px;
-	border-color: inherit;
+	/* border-color: inherit; */ /* Will be set by specific side */
 }
 
 .monaco-workbench .activitybar.left.bordered::before {
 	right: 0;
 	border-right-style: solid;
 	border-right-width: 1px;
+	border-right-color: var(--vscode-activityBar-border, #DDDDDD); /* Themed border */
 }
 
 .monaco-workbench .activitybar.right.bordered::before {
 	left: 0;
 	border-left-style: solid;
 	border-left-width: 1px;
+	border-left-color: var(--vscode-activityBar-border, #DDDDDD); /* Themed border */
 }
 
 .monaco-workbench .activitybar > .content {
@@ -45,7 +48,12 @@
 }
 
 .monaco-workbench .activitybar .action-item:focus {
-	outline: 0 !important; /* activity bar indicates focus custom */
+	outline: 0 !important; /* activity bar indicates focus custom - good, keep this */
+}
+
+/* Ensure default icon color is applied if not covered by activityaction.css specifics */
+.monaco-workbench .part.activitybar .monaco-action-bar .action-item .action-label.codicon {
+	color: var(--vscode-activityBar-inactiveForeground, #888888); /* Default/inactive icon color */
 }
 
 .monaco-workbench .activitybar > .content > .composite-bar {

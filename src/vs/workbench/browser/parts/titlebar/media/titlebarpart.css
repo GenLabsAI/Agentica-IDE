@@ -36,6 +36,8 @@
 /* Platform specific root element */
 .monaco-workbench.mac .part.titlebar > .titlebar-container {
 	line-height: 22px;
+	/* macOS native styling will handle transparency/blur if configured at OS level.
+	   If a truly custom bar was forced on mac, glass effect would go here. */
 }
 
 .monaco-workbench.web .part.titlebar > .titlebar-container,
@@ -43,6 +45,24 @@
 .monaco-workbench.linux .part.titlebar > .titlebar-container {
 	line-height: 22px;
 	justify-content: left;
+	/* Apply Apple Glass Effect for custom title bars on Windows/Linux */
+	background-color: rgba(234, 234, 234, 0.7); /* #EAEAEA with alpha, from titleBar.activeBackground */
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(15px);
+	border-bottom: 1px solid var(--vscode-titleBar-border, rgba(0, 0, 0, 0.05)); /* Subtle border */
+}
+
+.monaco-workbench.windows:not(.fullscreen) .part.titlebar > .titlebar-container,
+.monaco-workbench.linux:not(.fullscreen) .part.titlebar > .titlebar-container {
+	border-top-left-radius: var(--apple-ui-border-radius);
+	border-top-right-radius: var(--apple-ui-border-radius);
+	overflow: hidden; /* Ensures content is clipped to rounded corners */
+}
+
+.monaco-workbench.windows .part.titlebar.inactive > .titlebar-container,
+.monaco-workbench.linux .part.titlebar.inactive > .titlebar-container {
+	background-color: rgba(234, 234, 234, 0.6); /* Slightly more transparent for inactive */
+	/* Consider adjusting border for inactive if needed, e.g., var(--vscode-titleBar-inactiveBorder) */
 }
 
 .monaco-workbench.web.safari .part.titlebar,
@@ -107,6 +127,11 @@
 	text-overflow: ellipsis;
 	margin-left: auto;
 	margin-right: auto;
+	color: var(--vscode-titleBar-activeForeground); /* Ensure this is applied */
+}
+
+.monaco-workbench.part.titlebar.inactive > .titlebar-container > .titlebar-center > .window-title {
+	color: var(--vscode-titleBar-inactiveForeground); /* Ensure this is applied for inactive state */
 }
 
 .monaco-workbench.web .part.titlebar > .titlebar-container > .titlebar-center > .window-title,
@@ -336,11 +361,11 @@
 	height: 100%;
 	width: 46px;
 	font-size: 16px;
-	color: var(--vscode-titleBar-activeForeground);
+	color: var(--vscode-titleBar-activeForeground); /* Ensure foreground color is from theme */
 }
 
 .monaco-workbench .part.titlebar.inactive .window-controls-container > .window-icon {
-	color: var(--vscode-titleBar-inactiveForeground);
+	color: var(--vscode-titleBar-inactiveForeground); /* Ensure foreground color is from theme for inactive */
 }
 
 .monaco-workbench .part.titlebar .window-controls-container > .window-icon::before {
@@ -349,22 +374,20 @@
 }
 
 .monaco-workbench .part.titlebar .window-controls-container > .window-icon:hover {
-	background-color: rgba(255, 255, 255, 0.1);
+	/* Subtle hover for standard window controls, consider a slightly darker/lighter version of glass */
+	background-color: var(--vscode-titleBar-buttonHoverBackground, rgba(0, 0, 0, 0.1));
 }
 
-.monaco-workbench .part.titlebar.light .window-controls-container > .window-icon:hover {
-	background-color: rgba(0, 0, 0, 0.1);
-}
+/* .monaco-workbench .part.titlebar.light .window-controls-container > .window-icon:hover {
+	background-color: rgba(0, 0, 0, 0.1); // Already covered by the variable with fallback
+} */
 
 .monaco-workbench .part.titlebar .window-controls-container > .window-icon.window-close:hover {
-	background-color: rgba(232, 17, 35, 0.9);
+	background-color: var(--vscode-titleBar-closeButtonHoverBackground, rgba(232, 17, 35, 0.9)); /* Standard red for close */
+	color: var(--vscode-titleBar-closeButtonHoverForeground, white); /* Ensure text/icon is visible */
 }
 
-.monaco-workbench .part.titlebar .window-controls-container .window-icon.window-close:hover {
-	color: white;
-}
-
-/* Action Tool Bar Controls */
+/* Action Tool Bar Controls - Ensure they are flat and use themed colors */
 .monaco-workbench .part.titlebar > .titlebar-container > .titlebar-right > .action-toolbar-container {
 	display: none;
 	padding-right: 4px;
@@ -391,10 +414,16 @@
 }
 
 .monaco-workbench .part.titlebar > .titlebar-container > .titlebar-right > .action-toolbar-container .codicon {
-	color: inherit;
+	color: var(--vscode-titleBar-activeForeground); /* Use themed foreground color */
+}
+
+.monaco-workbench .part.titlebar.inactive > .titlebar-container > .titlebar-right > .action-toolbar-container .codicon {
+	color: var(--vscode-titleBar-inactiveForeground); /* Use themed foreground color for inactive */
 }
 
 .monaco-workbench .part.titlebar > .titlebar-container > .titlebar-right > .action-toolbar-container .monaco-action-bar .action-item {
+	background-color: transparent; /* Ensure flat appearance */
+	border: none; /* Remove default borders */
 	display: flex;
 }
 
@@ -438,6 +467,10 @@
 	mask-size: 12px;
 	-webkit-mask-size: 12px;
 	top: 2px;
+}
+
+.monaco-workbench .part.titlebar > .titlebar-container > .titlebar-right > .action-toolbar-container .monaco-action-bar .action-item:hover {
+	background-color: var(--vscode-titleBar-buttonHoverBackground, rgba(0, 0, 0, 0.1)); /* Consistent hover */
 }
 
 .monaco-workbench .part.titlebar > .titlebar-container > .titlebar-right > .action-toolbar-container .monaco-action-bar .action-item.icon .badge.compact .badge-content {

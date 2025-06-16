@@ -8,72 +8,149 @@
 	visibility: hidden !important;
 }
 
-.monaco-workbench .part.panel.bottom .composite.title {
-	border-top-width: 1px;
-	border-top-style: solid;
+/* Core panel style */
+.monaco-workbench .part.panel {
+	background-color: var(--vscode-panel-background, #F0F0F0); /* Themed background */
 }
 
-.monaco-workbench.nomaineditorarea .part.panel.bottom .composite.title {
+/* Borders and Radii based on position */
+.monaco-workbench .part.panel.bottom {
+	border-top: 1px solid var(--vscode-panel-border, rgba(0,0,0,0.1));
+	border-top-left-radius: var(--apple-ui-border-radius);
+	border-top-right-radius: var(--apple-ui-border-radius);
+}
+.monaco-workbench .part.panel.bottom > .title { /* Title container border */
+	border-top: 1px solid transparent; /* Overrides general .composite.title border if any, use panel border */
+}
+
+
+.monaco-workbench.nomaineditorarea .part.panel.bottom {
 	border-top-width: 0; /* no border when main editor area is hiden */
 }
 
 .monaco-workbench .part.panel.top {
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
+	border-bottom: 1px solid var(--vscode-panel-border, rgba(0,0,0,0.1));
+	border-bottom-left-radius: var(--apple-ui-border-radius);
+	border-bottom-right-radius: var(--apple-ui-border-radius);
+}
+.monaco-workbench .part.panel.top > .title {
+	border-bottom: 1px solid transparent;
 }
 
 .monaco-workbench.nomaineditorarea .part.panel.top {
-	border-bottom-width: 0; /* no border when main editor area is hiden */
+	border-bottom-width: 0;
 }
 
 .monaco-workbench .part.panel.right {
-	border-left-width: 1px;
-	border-left-style: solid;
+	border-left: 1px solid var(--vscode-panel-border, rgba(0,0,0,0.1));
+	border-top-right-radius: var(--apple-ui-border-radius); /* Assuming panel spans full height */
+	border-bottom-right-radius: var(--apple-ui-border-radius);
+}
+.monaco-workbench .part.panel.right > .title {
+	border-left: 1px solid transparent;
 }
 
 .monaco-workbench.nomaineditorarea .part.panel.right {
-	border-left-width: 0; /* no border when main editor area is hiden */
+	border-left-width: 0;
 }
 
 .monaco-workbench .part.panel.left {
-	border-right-width: 1px;
-	border-right-style: solid;
+	border-right: 1px solid var(--vscode-panel-border, rgba(0,0,0,0.1));
+	border-top-left-radius: var(--apple-ui-border-radius); /* Assuming panel spans full height */
+	border-bottom-left-radius: var(--apple-ui-border-radius);
+}
+.monaco-workbench .part.panel.left > .title {
+	border-right: 1px solid transparent;
 }
 
 .monaco-workbench.nomaineditorarea .part.panel.left {
-	border-right-width: 0; /* no border when main editor area is hiden */
+	border-right-width: 0;
 }
 
-.monaco-workbench .part.panel > .content .monaco-editor,
-.monaco-workbench .part.panel > .content .monaco-editor .margin,
-.monaco-workbench .part.panel > .content .monaco-editor .monaco-editor-background {
-	/* THIS DOESN'T WORK ANYMORE */
-	background-color: var(--vscode-panel-background);
+/* Panel title text itself (e.g. "TERMINAL", "PROBLEMS" if no tabs are active or it's a general title) */
+.monaco-workbench .part.panel > .title > .title-label {
+	color: var(--vscode-panelTitle-activeForeground, #333333);
 }
 
-.monaco-workbench .part.panel > .content .suggest-input-container .monaco-editor,
-.monaco-workbench .part.panel > .content .suggest-input-container .monaco-editor .margin,
-.monaco-workbench .part.panel > .content .suggest-input-container .monaco-editor .monaco-editor-background {
-	background-color: inherit;
+
+/* Styling for Panel Tabs (Action Bar Items) */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item .action-label {
+	background-color: transparent;
+	color: var(--vscode-panelTitle-inactiveForeground, #888888);
+	padding: 4px 8px;
+	border-radius: var(--apple-ui-border-radius);
+	border: none;
+	margin-right: 2px; /* Spacing between tabs */
 }
 
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item:hover:not(.checked) .action-label {
+	background-color: var(--vscode-panelTab-hoverBackground, rgba(0,0,0,0.05));
+	color: var(--vscode-panelTitle-activeForeground, #333333);
+}
+
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked .action-label {
+	background-color: var(--vscode-panelTab-activeBackground, #FFFFFF);
+	color: var(--vscode-panelTitle-activeForeground, #333333);
+	/* Optional: subtle bottom border for active tab instead of top indicator */
+	/* border-bottom: 2px solid var(--vscode-focusBorder); */
+	/* padding-bottom: 2px; */ /* Adjust if using border-bottom */
+}
+
+/* Active tab indicator - make it a subtle underline or hide if background is enough */
 .monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked:not(:focus) .active-item-indicator:before,
 .monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked.clicked:focus .active-item-indicator:before {
-	border-top-color: var(--vscode-panelTitle-activeBorder) !important;
+	border-top: none !important; /* Remove existing top border indicator */
+	border-bottom: 2px solid var(--vscode-panelTitle-activeBorder, var(--vscode-focusBorder)); /* Use theme variable, make it an underline */
+	bottom: 0; /* Position at the bottom of the action item */
+	top: auto; /* Override existing top positioning */
+	height: auto; /* Let the border define height */
+	width: 100%; /* Span the width of the tab */
+	left: 0;
 }
+/* Hide if background is preferred as sole indicator for active tab */
+/*
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked .active-item-indicator:before {
+	display: none;
+}
+*/
 
-.monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item:focus .action-label,
-.monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item:hover .action-label {
-	color: var(--vscode-panelTitle-activeForeground) !important;
-}
 
 .monaco-workbench .part.panel .monaco-inputbox {
 	border-color: var(--vscode-panelInput-border, transparent) !important;
 }
 
 .monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item:focus {
-	outline: none;
+	outline: none; /* Rely on global focus style for :focus-visible or ensure hover style is clear enough */
 }
+
+/* Panel Toolbar Actions (e.g., icons on the right of the panel header like Close, Maximize) */
+.monaco-workbench .part.panel > .title > .title-actions .action-item .codicon,
+.monaco-workbench .part.panel > .title > .title-actions .action-item .action-label { /* If label based actions are used */
+	color: var(--vscode-icon-foreground, #444444); /* Default icon color */
+	padding: 2px;
+	border-radius: var(--apple-ui-border-radius);
+}
+
+.monaco-workbench .part.panel > .title > .title-actions .action-item:hover {
+	background-color: var(--vscode-toolbar-hoverBackground, rgba(0,0,0,0.1));
+}
+
+
+/* THIS DOESN'T WORK ANYMORE - Keeping for reference, but panel background is set on .part.panel */
+/*
+.monaco-workbench .part.panel > .content .monaco-editor,
+.monaco-workbench .part.panel > .content .monaco-editor .margin,
+.monaco-workbench .part.panel > .content .monaco-editor .monaco-editor-background {
+	background-color: var(--vscode-panel-background);
+}
+*/
+
+.monaco-workbench .part.panel > .content .suggest-input-container .monaco-editor,
+.monaco-workbench .part.panel > .content .suggest-input-container .monaco-editor .margin,
+.monaco-workbench .part.panel > .content .suggest-input-container .monaco-editor .monaco-editor-background {
+	background-color: inherit; /* Should inherit from panel or input specific theme vars */
+}
+
 
 /* Rotate icons when panel is on right */
 .monaco-workbench .part.basepanel.right .title-actions .codicon-split-horizontal::before,

@@ -8,6 +8,15 @@
 	visibility: hidden !important;
 }
 
+/* Apply Apple Glass Effect to the sidebar */
+.monaco-workbench .part.sidebar {
+	background-color: rgba(245, 245, 247, 0.7); /* From .apple-glass-effect defined in global style.css */
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(15px);
+	border-right: 1px solid var(--vscode-sideBar-border, rgba(0, 0, 0, 0.1));
+	/* If sidebar is on the right, use: border-left: 1px solid var(--vscode-sideBar-border, rgba(0, 0, 0, 0.1)); */
+}
+
 .monaco-workbench .part.sidebar .title-actions .actions-container {
 	justify-content: flex-end;
 }
@@ -17,11 +26,15 @@
 }
 
 .monaco-workbench .part.sidebar > .title {
-	background-color: var(--vscode-sideBarTitle-background);
+	background-color: transparent; /* Allow glass effect from parent to show through */
+	padding-top: 4px; /* Adjust padding for a cleaner look */
+	padding-bottom: 4px; /* Adjust padding for a cleaner look */
+	border-bottom: none; /* Remove default border if any, rely on sidebar border or content separation */
 }
 
 .monaco-workbench .part.sidebar > .title > .title-label h2 {
 	text-transform: uppercase;
+	color: var(--vscode-sideBarTitle-foreground); /* Ensure themed color */
 }
 
 .monaco-workbench .viewlet .collapsible.header .title {

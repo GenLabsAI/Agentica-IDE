@@ -7,18 +7,21 @@
 	box-sizing: border-box;
 	display: flex;
 	width: 100%;
-	padding: 4px;
-	border-radius: 2px;
+	padding: 4px 10px; /* Adjusted padding */
+	border-radius: var(--apple-ui-border-radius); /* Apple border radius */
 	text-align: center;
 	cursor: pointer;
 	justify-content: center;
 	align-items: center;
-	border: 1px solid var(--vscode-button-border, transparent);
+	border: 1px solid var(--vscode-button-border, transparent); /* Default border, can be themed */
 	line-height: 18px;
+	user-select: none; /* Added user-select none */
+	transition: background-color 0.1s ease-out; /* Smooth hover transition */
 }
 
 .monaco-text-button:focus {
-	outline-offset: 2px !important;
+	/* outline-offset: 2px !important; */ /* Removed to prefer global focus style */
+	outline: none; /* Prefer global focus style (box-shadow) */
 }
 
 .monaco-text-button:hover {
@@ -150,25 +153,34 @@
 
 .monaco-button.default-colors.secondary,
 .monaco-button-dropdown.default-colors > .monaco-button.secondary {
-	color: var(--vscode-button-secondaryForeground);
-	background-color: var(--vscode-button-secondaryBackground);
+	color: var(--vscode-button-secondaryForeground, #333333);
+	background-color: var(--vscode-button-secondaryBackground, #EAEAEA);
+	border: 1px solid var(--vscode-button-border, #CCCCCC) !important; /* Ensure border for secondary */
 }
 
 .monaco-button.default-colors.secondary:hover,
 .monaco-button-dropdown.default-colors > .monaco-button.secondary:hover {
-	background-color: var(--vscode-button-secondaryHoverBackground);
+	background-color: var(--vscode-button-secondaryHoverBackground, #DCDCDC);
 }
 
 .monaco-button-dropdown.default-colors .monaco-button-dropdown-separator {
-	background-color: var(--vscode-button-background);
-	border-top: 1px solid var(--vscode-button-border);
-	border-bottom: 1px solid var(--vscode-button-border);
+	/* background-color: var(--vscode-button-background); */ /* Separator container takes button bg */
+	/* border-top: 1px solid var(--vscode-button-border); */ /* No top/bottom border on separator itself */
+	/* border-bottom: 1px solid var(--vscode-button-border); */
+	padding: 4px 0; /* Keep padding */
 }
 
-.monaco-button-dropdown.default-colors .monaco-button.secondary + .monaco-button-dropdown-separator {
-	background-color: var(--vscode-button-secondaryBackground);
+/* Ensure the separator line itself has a color that contrasts with its button background */
+.monaco-button-dropdown.default-colors > .monaco-button:not(.secondary) + .monaco-button-dropdown-separator > div {
+	background-color: var(--vscode-button-separator, #FFFFFF); /* For primary buttons */
 }
 
-.monaco-button-dropdown.default-colors .monaco-button-dropdown-separator > div {
-	background-color: var(--vscode-button-separator);
+.monaco-button-dropdown.default-colors .monaco-button.secondary + .monaco-button-dropdown-separator > div {
+	background-color: var(--vscode-button-separator, rgba(0,0,0,0.15)); /* For secondary buttons, a darker separator */
+}
+
+/* Ensure dropdown part of secondary button also has border */
+.monaco-button-dropdown.default-colors > .monaco-button.secondary.monaco-dropdown-button {
+	border: 1px solid var(--vscode-button-border, #CCCCCC) !important;
+	border-left-width: 0 !important; /* Keep this to avoid double border */
 }

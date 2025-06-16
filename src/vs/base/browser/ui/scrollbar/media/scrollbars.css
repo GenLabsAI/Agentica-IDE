@@ -3,31 +3,57 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-/* Arrows */
+/* Arrows - Hide them for macOS style */
 .monaco-scrollable-element > .scrollbar > .scra {
-	cursor: pointer;
-	font-size: 11px !important;
+	display: none !important;
 }
 
-.monaco-scrollable-element > .visible {
-	opacity: 1;
-
-	/* Background rule added for IE9 - to allow clicks on dom node */
-	background:rgba(0,0,0,0);
-
-	transition: opacity 100ms linear;
-	/* In front of peek view */
-	z-index: 11;
-}
-.monaco-scrollable-element > .invisible {
+/* Core scrollbar style - appear on hover over element */
+.monaco-scrollable-element > .scrollbar {
 	opacity: 0;
+	transition: opacity 0.2s ease-out;
+	/* In front of peek view, ensure it's above content */
+	z-index: 11;
+	/* Background rule added for IE9 - to allow clicks on dom node - keep if necessary, but opacity 0 should handle it */
+	background: rgba(0,0,0,0);
+}
+
+.monaco-scrollable-element:hover > .scrollbar,
+.monaco-scrollable-element > .scrollbar.active,
+.monaco-scrollable-element > .scrollbar.visible { /* .visible for programmatic show, .active for drag */
+	opacity: 1;
+	transition-delay: 0s; /* Show immediately on hover/active/visible */
+}
+
+/* Remove specific .visible and .invisible opacity rules if general rule handles it */
+/* .monaco-scrollable-element > .visible { ... } */
+/* .monaco-scrollable-element > .invisible { ... } */
+.monaco-scrollable-element > .invisible.fade { /* This might be for auto-hide after scrolling */
+	transition: opacity 800ms linear; /* Keep fade out transition if desired */
+	opacity: 0; /* Ensure it fades to 0 */
 	pointer-events: none;
 }
-.monaco-scrollable-element > .invisible.fade {
-	transition: opacity 800ms linear;
+
+
+/* Scrollbar Dimensions */
+.monaco-scrollable-element > .scrollbar.vertical {
+	width: 8px; /* Thin scrollbar track */
+	right: 2px; /* Offset from edge */
+}
+.monaco-scrollable-element > .scrollbar.vertical > .slider {
+	width: 100%; /* Slider takes full width of this thin track */
 }
 
-/* Scrollable Content Inset Shadow */
+.monaco-scrollable-element > .scrollbar.horizontal {
+	height: 8px; /* Thin scrollbar track */
+	bottom: 2px; /* Offset from edge */
+}
+.monaco-scrollable-element > .scrollbar.horizontal > .slider {
+	height: 100%; /* Slider takes full height of this thin track */
+}
+
+
+/* Scrollable Content Inset Shadow - These are fine, controlled by --vscode-scrollbar-shadow */
 .monaco-scrollable-element > .shadow {
 	position: absolute;
 	display: none;
@@ -58,18 +84,20 @@
 .monaco-scrollable-element > .shadow.top.left {
 	box-shadow: var(--vscode-scrollbar-shadow) 6px 0 6px -6px inset;
 }
-.monaco-scrollable-element .slider{
-	border-radius: 16px;
-	width: 6px !important;
+
+/* Slider (Thumb) Styling */
+.monaco-scrollable-element .slider { /* This is a general class, might affect other sliders if not careful */
+	border-radius: 4px; /* Rounded for pill shape on 8px track */
+	/* width: 6px !important; */ /* Width/height will be 100% of parent .scrollbar track */
 }
-.monaco-scrollable-element > .scrollbar > .slider {
-	background: var(--vscode-scrollbarSlider-background);
+.monaco-scrollable-element > .scrollbar > .slider { /* More specific selector for scrollbar thumb */
+	background: var(--vscode-scrollbarSlider-background, rgba(100, 100, 100, 0.4));
 }
 
 .monaco-scrollable-element > .scrollbar > .slider:hover {
-	background: var(--vscode-scrollbarSlider-hoverBackground);
+	background: var(--vscode-scrollbarSlider-hoverBackground, rgba(100, 100, 100, 0.7));
 }
 
 .monaco-scrollable-element > .scrollbar > .slider.active {
-	background: var(--vscode-scrollbarSlider-activeBackground);
+	background: var(--vscode-scrollbarSlider-activeBackground, rgba(0, 0, 0, 0.6));
 }

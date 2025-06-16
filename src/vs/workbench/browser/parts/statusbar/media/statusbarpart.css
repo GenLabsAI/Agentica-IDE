@@ -11,22 +11,22 @@
 	font-size: 12px;
 	display: flex;
 	overflow: hidden;
+	background-color: var(--vscode-statusBar-background, #F5F5F7);
+	color: var(--vscode-statusBar-foreground, #333333);
+	border-top: 1px solid var(--vscode-statusBar-border, rgba(0, 0, 0, 0.05)); /* Explicit top border */
+}
+
+.monaco-workbench .part.statusbar.no-workspace { /* Assuming this class is used */
+	background-color: var(--vscode-statusBar-noFolderBackground, #F5F5F7);
 }
 
 .monaco-workbench:not(.reduce-motion) .part.statusbar {
 	transition: background-color 0.15s ease-out;
 }
 
+/* Remove the ::after pseudo-element for border if we use direct border-top */
 .monaco-workbench .part.statusbar.status-border-top::after {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 5;
-	pointer-events: none;
-	background-color: var(--status-border-top-color);
-	width: 100%;
-	height: 1px;
+	display: none; /* Using direct border-top on .part.statusbar instead */
 }
 
 .monaco-workbench .part.statusbar > .left-items,
@@ -50,6 +50,8 @@
 	vertical-align: top;
 	max-width: 40vw;
 	font-variant-numeric: tabular-nums;
+	background-color: transparent; /* Ensure items are flat */
+	border: none; /* Ensure items are flat */
 }
 
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.has-beak {
@@ -175,10 +177,19 @@
 }
 
 .monaco-workbench:not(.hc-light):not(.hc-black) .part.statusbar > .items-container > .statusbar-item a:hover:not(.disabled) {
-	background-color: var(--vscode-statusBarItem-hoverBackground);
+	background-color: var(--vscode-statusBarItem-hoverBackground, rgba(0,0,0,0.05)); /* Default if not themed */
+	border-radius: var(--apple-ui-border-radius); /* Rounded hover */
 }
 
-/** Status bar entry item kinds */
+.monaco-workbench:not(.hc-light):not(.hc-black) .part.statusbar > .items-container > .statusbar-item a:active:not(.disabled) {
+	background-color: var(--vscode-statusBarItem-activeBackground) !important;
+	border-radius: var(--apple-ui-border-radius); /* Rounded active state */
+}
+
+
+/* Ensure icons inherit color - already correctly done by "color: inherit" on .codicon rule */
+
+/** Status bar entry item kinds - apply border-radius to their hover/active states too */
 
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.warning-kind {
 	color: var(--vscode-statusBarItem-warningForeground);
@@ -188,21 +199,25 @@
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.warning-kind a:hover:not(.disabled) {
 	color: var(--vscode-statusBarItem-warningHoverForeground);
 	background-color: var(--vscode-statusBarItem-warningHoverBackground) !important;
+	border-radius: var(--apple-ui-border-radius);
 }
 
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.error-kind {
 	color: var(--vscode-statusBarItem-errorForeground);
 	background-color: var(--vscode-statusBarItem-errorBackground);
+	border-radius: var(--apple-ui-border-radius); /* If the kind itself has a background */
 }
 
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.error-kind a:hover:not(.disabled) {
 	color: var(--vscode-statusBarItem-errorHoverForeground);
 	background-color: var(--vscode-statusBarItem-errorHoverBackground) !important;
+	border-radius: var(--apple-ui-border-radius);
 }
 
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.prominent-kind {
 	color: var(--vscode-statusBarItem-prominentForeground);
 	background-color: var(--vscode-statusBarItem-prominentBackground);
+	border-radius: var(--apple-ui-border-radius); /* If the kind itself has a background */
 }
 
 /**
@@ -218,24 +233,29 @@
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.prominent-kind:not(.compact-right):not(.compact-left) a:hover:not(.disabled) {
 	color: var(--vscode-statusBarItem-prominentHoverForeground);
 	background-color: var(--vscode-statusBarItem-prominentHoverBackground) !important;
+	border-radius: var(--apple-ui-border-radius);
 }
 
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.remote-kind {
 	color: var(--vscode-statusBarItem-remoteForeground);
 	background-color: var(--vscode-statusBarItem-remoteBackground);
+	border-radius: var(--apple-ui-border-radius); /* If the kind itself has a background */
 }
 
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.remote-kind a:hover:not(.disabled) {
 	color: var(--vscode-statusBarItem-remoteHoverForeground);
 	background-color: var(--vscode-statusBarItem-remoteHoverBackground) !important;
+	border-radius: var(--apple-ui-border-radius);
 }
 
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.offline-kind {
 	color: var(--vscode-statusBarItem-offlineForeground);
 	background-color: var(--vscode-statusBarItem-offlineBackground);
+	border-radius: var(--apple-ui-border-radius); /* If the kind itself has a background */
 }
 
 .monaco-workbench .part.statusbar > .items-container > .statusbar-item.offline-kind a:hover:not(.disabled) {
 	color: var(--vscode-statusBarItem-offlineHoverForeground);
 	background-color: var(--vscode-statusBarItem-offlineHoverBackground) !important;
+	border-radius: var(--apple-ui-border-radius);
 }

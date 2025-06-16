@@ -34,6 +34,13 @@
 
 /* Global Styles */
 
+.apple-glass-effect {
+	background-color: rgba(245, 245, 247, 0.7); /* Example: Light gray with 70% opacity, adjust based on theme */
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(15px); /* For Safari */
+	border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border for definition */
+}
+
 body {
 	height: 100%;
 	width: 100%;
@@ -46,6 +53,7 @@ body {
 }
 
 .monaco-workbench {
+	--apple-ui-border-radius: 6px; /* Example value */
 	font-size: 13px;
 	line-height: 1.4em;
 	position: relative;
@@ -152,6 +160,19 @@ body {
 	-moz-osx-font-smoothing: unset;
 }
 
+.monaco-workbench .monaco-inputbox,
+.monaco-workbench select,
+.monaco-workbench .monaco-list .monaco-list-row,
+.monaco-workbench .monaco-menu .monaco-action-item /* Assuming .monaco-menu and .monaco-action-item are used together */ {
+	border-radius: var(--apple-ui-border-radius);
+}
+
+/* Apply to select wrapper if specific class like monaco-select-box is used elsewhere or for consistency */
+.monaco-workbench .select-container select { /* More specific target for select if needed */
+	border-radius: var(--apple-ui-border-radius);
+}
+
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.monaco-workbench.mac.monaco-font-aliasing-auto {
 		-webkit-font-smoothing: antialiased;
@@ -221,6 +242,34 @@ body {
 
 /* Keyboard Focus Indication Styles */
 
+.monaco-workbench [tabindex="0"]:focus,
+.monaco-workbench [tabindex="-1"]:focus,
+.monaco-workbench input[type="text"]:focus,
+.monaco-workbench input[type="password"]:focus,
+.monaco-workbench input[type="email"]:focus,
+.monaco-workbench input[type="url"]:focus,
+.monaco-workbench input[type="search"]:focus,
+.monaco-workbench input[type="number"]:focus,
+.monaco-workbench input[type="checkbox"]:focus:not(:active), /* Avoid double indication on click for checkboxes */
+.monaco-workbench select:focus,
+.monaco-workbench textarea:focus,
+.monaco-workbench .monaco-list:focus .monaco-list-row.focused { /* Target focused rows in focused lists */
+	outline: none; /* Remove default outline */
+	box-shadow: 0 0 0 2px var(--vscode-focusBorder), 0 0 0 4px rgba(0, 122, 255, 0.3); /* Apple Blue with a softer outer glow */
+	border-color: transparent; /* Hide border that might interfere with box-shadow, especially on selects */
+}
+
+/* Ensure high contrast themes still get a clear focus indicator */
+.monaco-workbench.hc-black [tabindex="0"]:focus,
+.monaco-workbench.hc-light [tabindex="0"]:focus,
+.monaco-workbench.hc-black [tabindex="-1"]:focus,
+.monaco-workbench.hc-light [tabindex="-1"]:focus,
+.monaco-workbench.hc-black .monaco-list:focus .monaco-list-row.focused,
+.monaco-workbench.hc-light .monaco-list:focus .monaco-list-row.focused {
+	 outline: 2px solid var(--vscode-focusBorder) !important; /* Important to override other outlines */
+	 outline-offset: -2px !important;
+	 box-shadow: none !important; /* Remove box-shadow for HC themes */
+}
 
 
 .monaco-workbench.hc-black .synthetic-focus input,
@@ -228,21 +277,17 @@ body {
 	background: transparent; /* Search input focus fix when in high contrast */
 }
 
-.monaco-workbench input[type="checkbox"]:focus {
-	outline-offset: 2px;
-}
-
+/* Remove default outline for active elements as focus is now handled by box-shadow or HC outline */
 .monaco-workbench [tabindex="0"]:active,
 .monaco-workbench [tabindex="-1"]:active,
 .monaco-workbench select:active,
 .monaco-workbench input[type="button"]:active,
 .monaco-workbench input[type="checkbox"]:active {
-	outline: 0 !important; /* fixes some flashing outlines from showing up when clicking */
+	outline: 0 !important;
 }
 
-.monaco-workbench.mac select:focus {
-	border-color: transparent; /* outline is a square, but border has a radius, so we avoid this glitch when focused (https://github.com/microsoft/vscode/issues/26045) */
-}
+/* Specific handling for list focus when not using synthetic focus, if needed */
+/* .monaco-workbench .monaco-list:focus { outline: 0 !important; } */
 
 
 .monaco-workbench .monaco-list .monaco-list-row .monaco-highlighted-label .highlight {
@@ -250,11 +295,13 @@ body {
 }
 
 .monaco-workbench .monaco-list .monaco-list-row.focused .monaco-highlighted-label .highlight {
-	color: var(--vscode-list-focusHighlightForeground);
+	color: var(--vscode-list-focusHighlightForeground); /* This should still apply for the text color */
 }
 
+/* Synthetic focus elements should not show the new box-shadow focus */
 .monaco-workbench .synthetic-focus :focus {
-	outline: 0 !important; /* elements within widgets that draw synthetic-focus should never show focus */
+	outline: 0 !important;
+	box-shadow: none !important;
 }
 
 .monaco-workbench .monaco-inputbox.info.synthetic-focus,
@@ -264,11 +311,9 @@ body {
 .monaco-workbench .monaco-inputbox.warning input[type="text"]:focus,
 .monaco-workbench .monaco-inputbox.error input[type="text"]:focus {
 	outline: 0 !important; /* outline is not going well with decoration */
+	box-shadow: none !important; /* Ensure synthetic focus inputs don't get the global focus shadow */
 }
 
-.monaco-workbench .monaco-list:focus {
-	outline: 0 !important; /* tree indicates focus not via outline but through the focused item */
-}
 
 .monaco-workbench a.monaco-link:hover {
 	text-decoration: underline; /* render underline on hover for accessibility requirements */

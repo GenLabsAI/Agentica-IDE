@@ -9,20 +9,25 @@
 }
 
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item {
-    scale: 0.8;
-    border-radius: 8px;
+    /* scale: 0.8; */ /* Optional: kept for now, but could be removed for flatter feel */
+    border-radius: var(--apple-ui-border-radius, 6px); /* Use theme variable, ensure consistency */
+    position: relative; /* Keep for indicator positioning */
 }
 
-.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:hover {
-    backdrop-filter: brightness(0.75);
+.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:hover:not(.checked) {
+    /* backdrop-filter: brightness(0.75); */ /* Replaced with background color */
+    background-color: var(--vscode-activityBar-itemHoverBackground, rgba(0,0,0,0.05));
 }
 
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked {
-    backdrop-filter: brightness(0.55);
+    /* backdrop-filter: brightness(0.55); */ /* Replaced with background color */
+    background-color: var(--vscode-activityBar-itemActiveBackground, rgba(0,0,0,0.1));
 }
 
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item .active-item-indicator {
-    display: none;
+    /* display: none; */ /* This was hiding the indicator, enable it for .checked items below */
+    position: absolute; /* Ensure it's positioned correctly */
+	z-index: 1; /* Ensure it's visible */
 }
 
 .monaco-workbench .activitybar > .content .composite-bar > .monaco-action-bar .action-item::before,
@@ -82,40 +87,49 @@
 	justify-content: center;
 }
 
-.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.active .action-label.codicon,
+/* Default icon color */
+.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item .action-label.codicon {
+	color: var(--vscode-activityBar-inactiveForeground, #888888); /* New theme variable for inactive icons */
+}
+
+/* Active, Focus, Hover icon color */
+.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .action-label.codicon, /* .active is used in some places, .checked is more common for activity bar */
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .action-label.codicon,
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:hover .action-label.codicon {
-	color: var(--vscode-activityBar-foreground) !important;
+	color: var(--vscode-activityBar-foreground) !important; /* Use the main foreground for active/hover states */
 }
-.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.active .action-label.uri-icon,
+
+.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .action-label.uri-icon,
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .action-label.uri-icon,
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:hover .action-label.uri-icon {
-	background-color: var(--vscode-activityBar-foreground) !important;
-}
-
-.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .active-item-indicator:before,
-.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .active-item-indicator:before {
-	content: "";
-	position: absolute;
-	z-index: 1;
-	top: 0;
-	height: 100%;
-	width: 0;
-	border-left: 2px solid;
-}
-
-.monaco-workbench.hc-black .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .active-item-indicator:before,
-.monaco-workbench.hc-black .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .active-item-indicator:before {
-	border-color: var(--vscode-activityBar-activeBorder);
+	background-color: var(--vscode-activityBar-foreground) !important; /* For URI icons, use foreground as background */
 }
 
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .active-item-indicator:before {
+	content: "";
+	position: absolute;
+	/* z-index: 1; */ /* Already on .active-item-indicator */
 	top: 0;
 	height: 100%;
+	width: 0; /* This will be a border */
+	border-left: 2px solid var(--vscode-activityBar-activeBorder, var(--vscode-focusBorder)); /* Default for left bar */
+	/* border-right will be set for right aligned bar */
+}
+
+/* Keep HC style for active indicator border */
+.monaco-workbench.hc-black .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .active-item-indicator:before,
+.monaco-workbench.hc-black .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .active-item-indicator:before {
+	border-color: var(--vscode-activityBar-activeBorder) !important; /* Use important to override */
+}
+
+/* Remove focus indicator for HC if already handled by border */
+.monaco-workbench.hc-light .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .active-item-indicator:before,
+.monaco-workbench.hc-light .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .active-item-indicator:before {
+	border-color: var(--vscode-activityBar-activeBorder) !important; /* Use important to override */
 }
 
 
-/* Hides active elements in high contrast mode */
+/* Hides default active elements in high contrast mode if custom border is enough */
 .monaco-workbench.hc-black .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked:not(:focus) .active-item-indicator.action-item,
 .monaco-workbench.hc-light .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked:not(:focus) .active-item-indicator {
 	display: none;
@@ -135,11 +149,11 @@
 }
 
 /* Hides outline on HC as focus is handled by border */
-.monaco-workbench.hc-black .activitybar.left > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus:before,
-.monaco-workbench.hc-black .activitybar.right > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus:before,
-.monaco-workbench.hc-light .activitybar.left > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus:before,
-.monaco-workbench.hc-light .activitybar.right > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus:before {
-	outline: none;
+.monaco-workbench.hc-black .activitybar.left > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .active-item-indicator:before,
+.monaco-workbench.hc-black .activitybar.right > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .active-item-indicator:before,
+.monaco-workbench.hc-light .activitybar.left > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .active-item-indicator:before,
+.monaco-workbench.hc-light .activitybar.right > .content :not(.monaco-menu) > .monaco-action-bar .action-item:focus .active-item-indicator:before {
+	/* outline: none; */ /* Focus outline is globally handled, this might be redundant or for a specific ::before element */
 }
 
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .profile-badge,
@@ -176,14 +190,16 @@
 	position: absolute;
 	top: 24px;
 	right: 8px;
-	font-size: 9px;
+	font-size: 10px; /* Slightly larger */
 	font-weight: 600;
-	min-width: 8px;
-	height: 16px;
-	line-height: 16px;
-	padding: 0 4px;
-	border-radius: 20px;
+	min-width: 8px; /* Keep min-width */
+	height: auto; /* Let padding define height */
+	line-height: normal; /* Use normal line height */
+	padding: 2px 5px; /* Adjust padding */
+	border-radius: 8px; /* Pill shape consistent with --apple-ui-border-radius logic */
 	text-align: center;
+	background-color: var(--vscode-activityBarBadge-background, #007AFF); /* Themed */
+	color: var(--vscode-activityBarBadge-foreground, #FFFFFF); /* Themed */
 }
 
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .profile-badge .profile-text-overlay {
@@ -220,8 +236,20 @@
 
 /* Right aligned */
 
+.monaco-workbench .activitybar.right > .content :not(.monaco-menu) > .monaco-action-bar .action-item .active-item-indicator:before {
+	right: 0;
+	left: auto; /* Important to override default left */
+	border-right: 2px solid var(--vscode-activityBar-activeBorder, var(--vscode-focusBorder));
+	border-left: none; /* Ensure no left border */
+}
+
 .monaco-workbench .activitybar.right > .content :not(.monaco-menu) > .monaco-action-bar .profile-badge,
 .monaco-workbench .activitybar.right > .content :not(.monaco-menu) > .monaco-action-bar .badge {
 	left: auto;
 	right: 0;
+}
+
+.monaco-workbench .activitybar.right > .content :not(.monaco-menu) > .monaco-action-bar .badge .badge-content {
+	left: 8px; /* Adjust for right aligned bar if necessary */
+	right: auto;
 }
